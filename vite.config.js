@@ -19,4 +19,11 @@ export default defineConfig({
       credentials: true,
     },
   },
+  define: {
+    'process.env.NODE_ENV': '"production"',
+  },
+  esbuild: {
+    jsxFactory: 'React.createElement',
+    jsxFragment: 'React.Fragment',
+  },
 });
