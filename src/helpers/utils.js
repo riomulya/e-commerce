@@ -3,8 +3,18 @@ export const displayDate = (timestamp) => {
   const date = new Date(timestamp);
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July',
-    'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const day = date.getDate();
@@ -16,9 +26,9 @@ export const displayDate = (timestamp) => {
 };
 
 export const displayMoney = (n) => {
-  const format = new Intl.NumberFormat('en-US', {
+  const format = new Intl.NumberFormat('id-ID', {
     style: 'currency',
-    currency: 'USD'
+    currency: 'IDR',
   });
 
   // or use toLocaleString()
@@ -37,17 +47,17 @@ export const displayActionMessage = (msg, status = 'info') => {
   const div = document.createElement('div');
   const span = document.createElement('span');
 
-  div.className = `toast ${status === 'info'
-    ? 'toast-info'
-    : status === 'success'
+  div.className = `toast ${
+    status === 'info'
+      ? 'toast-info'
+      : status === 'success'
       ? 'toast-success'
       : 'toast-error'
     // eslint-disable-next-line indent
-    }`;
+  }`;
   span.className = 'toast-msg';
   span.textContent = msg;
   div.appendChild(span);
-
 
   if (document.querySelector('.toast')) {
     document.body.removeChild(document.querySelector('.toast'));

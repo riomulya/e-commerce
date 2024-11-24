@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 import { ArrowLeftOutlined, ArrowRightOutlined } from '@ant-design/icons';
 import { Boundary } from '@/components/common';
-import { CHECKOUT_STEP_1, CHECKOUT_STEP_3 } from '@/constants/routes';
+import { CHECKOUT_STEP_1 } from '@/constants/routes';
 import { Form, Formik } from 'formik';
 import { useDocumentTitle, useScrollTop } from '@/hooks';
 import PropType from 'prop-types';
@@ -53,7 +53,8 @@ const ShippingDetails = ({ profile, shipping, subtotal }) => {
     isDone: shipping.isDone || false
   };
 
-  const onSubmitForm = (form) => {
+  const onSubmitForm = async (form) => {
+    // Step 1: Simpan shipping details ke Redux
     dispatch(setShippingDetails({
       fullname: form.fullname,
       email: form.email,
@@ -62,7 +63,56 @@ const ShippingDetails = ({ profile, shipping, subtotal }) => {
       isInternational: form.isInternational,
       isDone: true
     }));
-    history.push(CHECKOUT_STEP_3);
+    const transactionData = {
+      orderId: `ORDER-${new Date().getTime()}`, // ID unik untuk pesanan
+      quantity: 1, // Ubah sesuai dengan logika jumlah item
+      price: subtotal // Total harga
+    };
+    // Step 2: Kirim request ke backend untuk mendapatkan Midtrans token
+    try {
+      const response = await fetch('http://localhost:8080/createTransaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: `ORDER-${new Date().getTime()}`, // Order ID unik
+          quantity: 1,
+          price: subtotal , // Total harga termasuk biaya internasional
+        }),
+      });
+      console.log({transactionData});
+      const data = await response.json();
+
+    // Redirect ke URL Midtrans atau gunakan Snap popup
+      if (data.redirect_url) {
+        // Redirect pengguna ke halaman pembayaran Midtrans
+        window.location.href = data.redirect_url;
+      } else {
+        // Alternatif: gunakan Snap popup jika Anda ingin tetap di halaman
+        window.snap.pay(data.token, {
+          onSuccess: (result) => {
+            console.log('Payment success:', result);
+            alert('Pembayaran berhasil!');
+            history.push(CHECKOUT_STEP_3); // Lanjutkan ke langkah berikutnya
+          },
+          onPending: (result) => {
+            console.log('Payment pending:', result);
+            alert('Pembayaran pending!');
+          },
+          onError: (result) => {
+            console.error('Payment error:', result);
+            alert('Pembayaran gagal.');
+          },
+          onClose: () => {
+            alert('Anda menutup popup pembayaran.');
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error during payment:', error);
+      alert('Terjadi kesalahan saat memproses pembayaran.');
+    }
   };
 
   return (
@@ -77,7 +127,7 @@ const ShippingDetails = ({ profile, shipping, subtotal }) => {
             validationSchema={FormSchema}
             onSubmit={onSubmitForm}
           >
-            {() => (
+            {({ values }) => (
               <Form>
                 <ShippingForm />
                 <br />
@@ -99,7 +149,7 @@ const ShippingDetails = ({ profile, shipping, subtotal }) => {
                     className="button button-icon"
                     type="submit"
                   >
-                    Next Step
+                    Confirm & Pay
                     &nbsp;
                     <ArrowRightOutlined />
                   </button>

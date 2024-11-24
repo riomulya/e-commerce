@@ -69,9 +69,9 @@ const ProductAppliedFilters = ({ filteredProductsCount }) => {
             <span className="d-block">Price Range</span>
             <div className="pill padding-right-l">
               <h5 className="pill-content margin-0">
-                $
+                RP. 
                 {filter.minPrice}
-                - $
+                - RP. 
                 {filter.maxPrice}
               </h5>
               <div
