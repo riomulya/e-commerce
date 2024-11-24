@@ -25,7 +25,7 @@ const FeaturedProducts = () => {
           <div className="banner-img">
             <img src={bannerImg} alt="" />
           </div>
-        </div>
+        </div>  
         <div className="display">
           <div className="product-display-grid">
             {(error && !isLoading) ? (
