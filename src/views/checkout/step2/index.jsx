@@ -39,7 +39,7 @@ const FormSchema = Yup.object().shape({
 });
 
 const ShippingDetails = ({ profile, shipping, subtotal }) => {
-  useDocumentTitle('Check Out Step 2 | Salinaka');
+  useDocumentTitle('Check Out Step 2');
   useScrollTop();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -94,7 +94,6 @@ const ShippingDetails = ({ profile, shipping, subtotal }) => {
           onSuccess: (result) => {
             console.log('Payment success:', result);
             alert('Pembayaran berhasil!');
-            history.push(CHECKOUT_STEP_3); // Lanjutkan ke langkah berikutnya
           },
           onPending: (result) => {
             console.log('Payment pending:', result);
