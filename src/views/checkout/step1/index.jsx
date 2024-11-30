@@ -3,13 +3,29 @@ import { BasketItem } from '@/components/basket';
 import { displayMoney } from '@/helpers/utils';
 import { useDocumentTitle, useScrollTop } from '@/hooks';
 import PropType from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { StepTracker } from '../components';
 import withCheckout from '../hoc/withCheckout';
 
 const OrderSummary = ({ basket, subtotal }) => {
+useEffect(() => {
+  const snapScript = document.createElement('script');
+  const clienKey = process.env.VITE_MIDTRANS_CLIENT_KEY;
+
+  const script = document.createElement('script');
+  script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+  script.async = true;
+
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  }
+}, [third])
+
+
   useDocumentTitle('Check Out Step 1');
   useScrollTop();
   const dispatch = useDispatch();
