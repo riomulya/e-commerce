@@ -26,7 +26,7 @@ const OrderSummary = ({ basket, subtotal }) => {
 
     try {
       // Step 2: Send request to backend to create a transaction and get the payment token
-      const response = await fetch('http://localhost:8080/createTransaction', {
+      const response = await fetch('https://api-e-commerce-lovat.vercel.app/createTransaction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
