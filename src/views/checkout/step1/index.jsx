@@ -3,29 +3,13 @@ import { BasketItem } from '@/components/basket';
 import { displayMoney } from '@/helpers/utils';
 import { useDocumentTitle, useScrollTop } from '@/hooks';
 import PropType from 'prop-types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { StepTracker } from '../components';
 import withCheckout from '../hoc/withCheckout';
 
 const OrderSummary = ({ basket, subtotal }) => {
-useEffect(() => {
-  const snapScript = document.createElement('script');
-  const clienKey = process.env.VITE_MIDTRANS_CLIENT_KEY;
-
-  const script = document.createElement('script');
-  script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-  script.async = true;
-
-  document.body.appendChild(script);
-
-  return () => {
-    document.body.removeChild(script);
-  }
-}, [third])
-
-
   useDocumentTitle('Check Out Step 1');
   useScrollTop();
   const dispatch = useDispatch();
@@ -54,7 +38,10 @@ useEffect(() => {
       console.log('Transaction data:', data);
 
       // Check if redirect URL is available (for redirect payment flow)
-       if (data.token) {
+      if (data.redirect_url) {
+        // Redirect the user to the payment gateway (Midtrans)
+        window.location.href = data.redirect_url;
+      } else if (data.token) {
         // Use Snap (popup) for payment if redirect URL is not available
         window.snap.pay(data.token, {
           onSuccess: (result) => {
