@@ -10,7 +10,7 @@ import { StepTracker } from '../components';
 import withCheckout from '../hoc/withCheckout';
 
 const OrderSummary = ({ basket, subtotal }) => {
-  useDocumentTitle('Check Out Step 1 | Salinaka');
+  useDocumentTitle('Check Out Step 1');
   useScrollTop();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -26,9 +26,8 @@ const OrderSummary = ({ basket, subtotal }) => {
 
     try {
       // Step 2: Send request to backend to create a transaction and get the payment token
-      const response = await fetch('https://api-e-commerce-lovat.vercel.app/createTransaction', {
+      const response = await fetch('https://api-e-commerce-riomulyas-projects.vercel.app/createTransaction', {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
