@@ -4,7 +4,7 @@ import PropType from 'prop-types';
 import React from 'react';
 
 const ShippingTotal = ({ subtotal }) => {
-  const { values } = useFormikContext();
+  // const { values } = useFormikContext();
 
   return (
     <div className="checkout-total d-flex-end padding-right-m">
@@ -30,7 +30,7 @@ const ShippingTotal = ({ subtotal }) => {
             </td>
             <td>
               <h2 className="basket-total-amount text-right">
-                {displayMoney(Number(subtotal) + (values.isInternational ? 500000 : 0))}
+                {displayMoney(Number(subtotal) )}
               </h2>
             </td>
           </tr>

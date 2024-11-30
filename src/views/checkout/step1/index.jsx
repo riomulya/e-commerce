@@ -118,7 +118,7 @@ const Checkout = ({ profile, shipping, basket, subtotal }) => {
   useScrollTop();
 
   const onClickPrevious = () => history.push('/');
-  const onClickNext = () => history.push(CHECKOUT_STEP_2);
+  // const onClickNext = () => history.push(CHECKOUT_STEP_2);
 
   return (
     <Boundary>

@@ -3,16 +3,16 @@ import React from 'react';
 
 const StepTracker = ({ current }) => {
   // eslint-disable-next-line no-nested-ternary
-  const className = (step) => (current === step
-    ? 'is-active-step'
-    : step < current
-      ? 'is-done-step'
-      : '');
+  // const className = (step) => (current === step
+  //   ? 'is-active-step'
+  //   : step < current
+  //     ? 'is-done-step'
+  //     : '');
 
   return (
     <div className="checkout-header">
       {/* <ul className="checkout-header-menu"> */}
-        <li className={`checkout-header-list ${className(1)}`}>
+        <li className={`checkout-header-list }`}>
           <div className="checkout-header-item">
             <div className="checkout-header-icon">
               <h4 className="checkout-header-step">1</h4>
