@@ -29,9 +29,10 @@ export const displayMoney = (n) => {
   const format = new Intl.NumberFormat('id-ID', {
     style: 'currency',
     currency: 'IDR',
+    minimumFractionDigits: 0, // Menambahkan ini untuk menghindari desimal
+    maximumFractionDigits: 0, // Membatasi angka desimal menjadi 0
   });
 
-  // or use toLocaleString()
   return format.format(n);
 };
 
