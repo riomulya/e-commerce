@@ -54,10 +54,7 @@ useEffect(() => {
       console.log('Transaction data:', data);
 
       // Check if redirect URL is available (for redirect payment flow)
-      if (data.redirect_url) {
-        // Redirect the user to the payment gateway (Midtrans)
-        window.location.href = data.redirect_url;
-      } else if (data.token) {
+       if (data.token) {
         // Use Snap (popup) for payment if redirect URL is not available
         window.snap.pay(data.token, {
           onSuccess: (result) => {
