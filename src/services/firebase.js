@@ -1,14 +1,14 @@
-import app from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage";
-import firebaseConfig from "./config";
+import app from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+// import "firebase/storage";
+import firebaseConfig from './config';
 
 class Firebase {
   constructor() {
     app.initializeApp(firebaseConfig);
 
-    this.storage = app.storage();
+    // this.storage = app.storage();
     this.db = app.firestore();
     this.auth = app.auth();
   }
@@ -34,9 +34,9 @@ class Firebase {
 
   passwordReset = (email) => this.auth.sendPasswordResetEmail(email);
 
-  addUser = (id, user) => this.db.collection("users").doc(id).set(user);
+  addUser = (id, user) => this.db.collection('users').doc(id).set(user);
 
-  getUser = (id) => this.db.collection("users").doc(id).get();
+  getUser = (id) => this.db.collection('users').doc(id).get();
 
   passwordUpdate = (password) => this.auth.currentUser.updatePassword(password);
 
@@ -48,7 +48,7 @@ class Firebase {
           user
             .updatePassword(newPassword)
             .then(() => {
-              resolve("Password updated successfully!");
+              resolve('Password updated successfully!');
             })
             .catch((error) => reject(error));
         })
@@ -73,7 +73,7 @@ class Firebase {
           user
             .updateEmail(newEmail)
             .then(() => {
-              resolve("Email Successfully updated");
+              resolve('Email Successfully updated');
             })
             .catch((error) => reject(error));
         })
@@ -81,7 +81,7 @@ class Firebase {
     });
 
   updateProfile = (id, updates) =>
-    this.db.collection("users").doc(id).update(updates);
+    this.db.collection('users').doc(id).update(updates);
 
   onAuthStateChanged = () =>
     new Promise((resolve, reject) => {
@@ -89,20 +89,20 @@ class Firebase {
         if (user) {
           resolve(user);
         } else {
-          reject(new Error("Auth State Changed failed"));
+          reject(new Error('Auth State Changed failed'));
         }
       });
     });
 
   saveBasketItems = (items, userId) =>
-    this.db.collection("users").doc(userId).update({ basket: items });
+    this.db.collection('users').doc(userId).update({ basket: items });
 
   setAuthPersistence = () =>
     this.auth.setPersistence(app.auth.Auth.Persistence.LOCAL);
 
   // // PRODUCT ACTIONS --------------
 
-  getSingleProduct = (id) => this.db.collection("products").doc(id).get();
+  getSingleProduct = (id) => this.db.collection('products').doc(id).get();
 
   getProducts = (lastRefKey) => {
     let didTimeout = false;
@@ -112,7 +112,7 @@ class Firebase {
         if (lastRefKey) {
           try {
             const query = this.db
-              .collection("products")
+              .collection('products')
               .orderBy(app.firestore.FieldPath.documentId())
               .startAfter(lastRefKey)
               .limit(12);
@@ -126,19 +126,19 @@ class Firebase {
 
             resolve({ products, lastKey });
           } catch (e) {
-            reject(e?.message || ":( Failed to fetch products.");
+            reject(e?.message || ':( Failed to fetch products.');
           }
         } else {
           const timeout = setTimeout(() => {
             didTimeout = true;
-            reject(new Error("Request timeout, please try again"));
+            reject(new Error('Request timeout, please try again'));
           }, 15000);
 
           try {
-            const totalQuery = await this.db.collection("products").get();
+            const totalQuery = await this.db.collection('products').get();
             const total = totalQuery.docs.length;
             const query = this.db
-              .collection("products")
+              .collection('products')
               .orderBy(app.firestore.FieldPath.documentId())
               .limit(12);
             const snapshot = await query.get();
@@ -155,7 +155,7 @@ class Firebase {
             }
           } catch (e) {
             if (didTimeout) return;
-            reject(e?.message || ":( Failed to fetch products.");
+            reject(e?.message || ':( Failed to fetch products.');
           }
         }
       })();
@@ -167,22 +167,22 @@ class Firebase {
 
     return new Promise((resolve, reject) => {
       (async () => {
-        const productsRef = this.db.collection("products");
+        const productsRef = this.db.collection('products');
 
         const timeout = setTimeout(() => {
           didTimeout = true;
-          reject(new Error("Request timeout, please try again"));
+          reject(new Error('Request timeout, please try again'));
         }, 15000);
 
         try {
           const searchedNameRef = productsRef
-            .orderBy("name_lower")
-            .where("name_lower", ">=", searchKey)
-            .where("name_lower", "<=", `${searchKey}\uf8ff`)
+            .orderBy('name_lower')
+            .where('name_lower', '>=', searchKey)
+            .where('name_lower', '<=', `${searchKey}\uf8ff`)
             .limit(12);
           const searchedKeywordsRef = productsRef
-            .orderBy("dateAdded", "desc")
-            .where("keywords", "array-contains-any", searchKey.split(" "))
+            .orderBy('dateAdded', 'desc')
+            .where('keywords', 'array-contains-any', searchKey.split(' '))
             .limit(12);
 
           // const totalResult = await totalQueryRef.get();
@@ -232,22 +232,22 @@ class Firebase {
 
   getFeaturedProducts = (itemsCount = 12) =>
     this.db
-      .collection("products")
-      .where("isFeatured", "==", true)
+      .collection('products')
+      .where('isFeatured', '==', true)
       .limit(itemsCount)
       .get();
 
   getRecommendedProducts = (itemsCount = 12) =>
     this.db
-      .collection("products")
-      .where("isRecommended", "==", true)
+      .collection('products')
+      .where('isRecommended', '==', true)
       .limit(itemsCount)
       .get();
 
   addProduct = (id, product) =>
-    this.db.collection("products").doc(id).set(product);
+    this.db.collection('products').doc(id).set(product);
 
-  generateKey = () => this.db.collection("products").doc().id;
+  generateKey = () => this.db.collection('products').doc().id;
 
   storeImage = async (id, folder, imageFile) => {
     const snapshot = await this.storage.ref(folder).child(id).put(imageFile);
@@ -256,12 +256,12 @@ class Firebase {
     return downloadURL;
   };
 
-  deleteImage = (id) => this.storage.ref("products").child(id).delete();
+  deleteImage = (id) => this.storage.ref('products').child(id).delete();
 
   editProduct = (id, updates) =>
-    this.db.collection("products").doc(id).update(updates);
+    this.db.collection('products').doc(id).update(updates);
 
-  removeProduct = (id) => this.db.collection("products").doc(id).delete();
+  removeProduct = (id) => this.db.collection('products').doc(id).delete();
 }
 
 const firebaseInstance = new Firebase();

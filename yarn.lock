@@ -8944,6 +8944,11 @@ rc-util@^5.9.4:
     "@babel/runtime" "^7.18.3"
     react-is "^18.2.0"
 
+react-chatbotify@^2.0.0-beta.26:
+  version "2.0.0-beta.26"
+  resolved "https://registry.npmjs.org/react-chatbotify/-/react-chatbotify-2.0.0-beta.26.tgz"
+  integrity sha512-WZFiF4Siwy3jMdnJjsaHvn0d36abiApg+E6fyXbdurmpZLKTJSfH5kmnmkgutHexDTLJIEZi0Gm3HXA2EYDRfA==
+
 react-compound-slider@^3.3.1:
   version "3.4.0"
   resolved "https://registry.npmjs.org/react-compound-slider/-/react-compound-slider-3.4.0.tgz"
